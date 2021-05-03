@@ -1,14 +1,16 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const index=require("./routes/index");
+const {mydb}=require('./config/db')
+const index=require("./routes");
 const app = express();
-const mysql=require('mysql2');
-
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/',index);
-app.set("view engine", "ejs");
+mydb.then(()=>{
+  app.listen(3000, () => {
+    console.log("Listening to the port 3000");
+  });
+}).catch(()=>{
+  console.log("Error");
+})
 
-app.listen(3000, () => {
-  console.log("Listening to the port 3000");
-});

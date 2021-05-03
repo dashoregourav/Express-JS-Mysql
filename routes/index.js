@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const conn = require("../config/db");
+const {connection} = require("../config/db");
 router.get("/", (req, res) => {
   res.send("Welcome to the Home Page..");
 });
@@ -12,14 +12,14 @@ router.post("/create", (req, res) => {
     email: req.body.email,
     mobile: req.body.mobile,
   };
-  conn.query("Insert into user set ?", data, (err, result) => {
+  connection.query("Insert into user set ?", data, (err, result) => {
     if (err) {
-      res.send({
+      res.json({
         msg: "error",
         error: err,
       });
     } else {
-      res.send({
+      res.json({
         msg: "SuccessFully Created User",
         data: result,
       });
@@ -28,14 +28,14 @@ router.post("/create", (req, res) => {
 });
 
 router.get("/get-details", (req, res) => {
-  conn.query("select * from user", (err, result) => {
+  connection.query("select * from user", (err, result) => {
     if (err) {
-      res.send({
+      res.json({
         msg: "error",
         error: err,
       });
     } else {
-      res.send({
+      res.json({
         msg: "SuccessFully Fetch User Data",
         data: result,
       });
@@ -50,14 +50,17 @@ router.put("/update/:id", (req, res) => {
     email: req.body.email,
     mobile: req.body.mobile,
   };
-  conn.query(`update user set ? where id=${req.params.id}`,data,(err, result) => {
+  connection.query(
+    `update user set ? where id=${req.params.id}`,
+    data,
+    (err, result) => {
       if (err) {
-        res.send({
+        res.json({
           msg: "error",
           error: err,
         });
       } else {
-        res.send({
+        res.json({
           msg: "successFully Updated User",
           data: result,
         });
@@ -67,14 +70,16 @@ router.put("/update/:id", (req, res) => {
 });
 
 router.delete("/delete/:id", (req, res) => {
-  conn.query(`delete from user where id=${req.params.id}`,(err, result) => {
+  connection.query(
+    `delete from user where id=${req.params.id}`,
+    (err, result) => {
       if (err) {
-        res.send({
+        res.json({
           msg: "error",
           error: err,
         });
       } else {
-        res.send({
+        res.json({
           msg: "SuccessFully Deleted User",
           data: result,
         });
